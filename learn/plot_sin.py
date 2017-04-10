@@ -11,11 +11,13 @@ from mongoengine import *
 
 
 class DataCollection(Document):
+    facility_type = IntField()
+    direction = IntField()
     p = ListField()
     a = ListField()
     b = ListField()
     c = ListField()
-    isManmade = IntField()
+    is_man_made = IntField()
     first_judge_machine = IntField()
     first_judge_artificial = IntField()
     second_judge_machine = IntField()
@@ -28,13 +30,15 @@ class ShopListJobCollectionClass:
         connect(self.db_name)
 
     @staticmethod
-    def insert(p, a, b, c, man, f1, f2, s1, s2):
+    def insert(p, a, b, c, f, d, man, f1, f2, s1, s2):
         DataCollection(
+            facility_type=f,
+            direction=d,
             p=p,
             a=a,
             b=b,
             c=c,
-            isManmade=man,
+            is_man_made=man,
             first_judge_machine=f1,
             first_judge_artificial=f2,
             second_judge_machine=s1,
@@ -45,7 +49,7 @@ class ShopListJobCollectionClass:
 def deal_csv():
     file = 'casco_train.csv'
     total = pd.read_csv(file)
-    for i in range(160000):
+    for i in range(190642):
         sd = total['switch_data'][i]
         full_string = sd[2:-1].split(',')
         full_list = []
@@ -56,12 +60,14 @@ def deal_csv():
         b = full_list[2000:3000]
         c = full_list[3000:]
         man = total['isManmade'][i]
+        f = total['facility_type'][i]
+        d = int(total['direction'][i])
         f1 = total['first_judge_machine'][i]
         f2 = total['first_judge_artificial'][i]
         s1 = total['second_judge_machine'][i]
         s2 = total['second_judge_artificial'][i]
         bsbsbs = ShopListJobCollectionClass()
-        bsbsbs.insert(p, a, b, c, man, f1, f2, s1, s2)
+        bsbsbs.insert(p, a, b, c, f, d, man, f1, f2, s1, s2)
 
 
 def draw_sin():
@@ -94,5 +100,5 @@ def find_and_show():
 
 if __name__ == '__main__':
     # draw_sin()
-    # deal_csv()
-    find_and_show()
+    deal_csv()
+    # find_and_show()
