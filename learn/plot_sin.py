@@ -49,7 +49,7 @@ class ShopListJobCollectionClass:
 def deal_csv():
     file = 'casco_train.csv'
     total = pd.read_csv(file)
-    for i in range(190642):
+    for i in np.arange(180635, 190642, 1):
         sd = total['switch_data'][i]
         full_string = sd[2:-1].split(',')
         full_list = []
@@ -61,7 +61,7 @@ def deal_csv():
         c = full_list[3000:]
         man = total['isManmade'][i]
         f = total['facility_type'][i]
-        d = int(total['direction'][i])
+        d = total['direction'][i]
         f1 = total['first_judge_machine'][i]
         f2 = total['first_judge_artificial'][i]
         s1 = total['second_judge_machine'][i]
@@ -81,19 +81,22 @@ def draw_sin():
     plt.show()
 
 
-def draw_wave(switch_data):
+def draw_wave(switch_data, num):
     color = ['black', 'blue', 'red']
     t = np.arange(0, 10, 0.01)
     data = switch_data
-    plt.plot(t, data, 'black')
+    plt.plot(t, data, color[num])
 
 
 def find_and_show():
     db_name = "casco"
     connect(db_name)
-    wrong = DataCollection.objects(first_judge_machine=0)[:100]
+    right = DataCollection.objects(first_judge_machine=0)[:100]
+    for item in right:
+        draw_wave(item.c, 1)
+    wrong = DataCollection.objects(first_judge_machine=1)[:100]
     for item in wrong:
-        draw_wave(item.p)
+        draw_wave(item.c, 2)
 
     plt.show()
 
