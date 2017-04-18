@@ -96,10 +96,10 @@ def draw_wave(switch_data, right=True):
 def find_and_show():
     db_name = "casco"
     connect(db_name)
-    right = DataCollection.objects(first_judge_machine=0)[:1000]
+    right = DataCollection.objects(first_judge_machine=0)[:50]
     for item in right:
         draw_wave(item.p)
-    wrong = DataCollection.objects(first_judge_machine=1)[:300]
+    wrong = DataCollection.objects(first_judge_machine=1)[:30]
     for item in wrong:
         draw_wave(item.p, False)
 
